@@ -1,7 +1,7 @@
 # adp-plus
 A Chrome Extension that adds AutoFill, AutoSave & other features to ADP TimeClock for CBU Student Workers
 
-![](media/demo.mp4)
+![](media/demo.gif)
 
 ## Features
 * Automatically maximizes the timecard for easier editing. _(To return to default view, click the rectangle icon in the top right corner)_
