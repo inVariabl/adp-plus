@@ -1,11 +1,13 @@
 // ==UserScript==
 // @name        ADP Plus
-// @description Adds Autofill Time Clock to ADP Comments for CBU Student Workers
-// @namespace   Violentmonkey Scripts
+// @description A Chrome Extension that adds AutoFill, AutoSave & other features to ADP TimeClock for CBU Student Workers
+// @namespace   ADP
 // @include     https://eetd2.adp.com/*
 // @grant       none
 // @version     1.0
 // @author      Daniel Crooks
+// @icon        https://raw.githubusercontent.com/inVariabl/adp-plus/main/extension/icon.png
+// @license     GPL-3
 // ==/UserScript==
 
 const SAVE_INTERVAL = 10; // AutoSaves every 10 seconds
