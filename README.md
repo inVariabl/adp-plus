@@ -24,7 +24,7 @@ _Coming Soon_
 2. Click ![here](https://github.com/inVariabl/adp-plus/raw/main/ADP%20Plus.user.js) to install the script
 
 ### Developer Source
-1. Download the source code ![here](https://github.com/inVariabl/adp-plus/archive/refs/heads/main.zip)
+1. Download the source code ![here](https://github.com/inVariabl/adp-plus/archive/refs/heads/main.zip) and extract it
 2. Navigate to `chrome://extensions` in your browser
 3. Enable 'Developer Mode'
 4. Click 'Load Unpacked' and naviagate to `adp-plus/extension`
