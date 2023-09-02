@@ -15,6 +15,20 @@ A Chrome Extension that adds AutoFill, AutoSave & other features to ADP TimeCloc
 - [ ] bind 'Enter' to open timecard comments
 - [ ] 'speed mode' to fill out all comments without touching the mouse
 
+## Installation
+### Chrome Web Store
+_Coming Soon_
+
+### Userscript
+1. Install a userscript manager like ![TamperMonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) or ![ViolentMonkey](https://chrome.google.com/webstore/detail/violentmonkey/jinjaccalgkegednnccohejagnlnfdag)
+2. Click ![here](https://github.com/inVariabl/adp-plus/raw/main/ADP%20Plus.user.js) to install the script
+
+### Developer Source
+1. Download the source code ![here](https://github.com/inVariabl/adp-plus/archive/refs/heads/main.zip)
+2. Navigate to `chrome://extensions` in your browser
+3. Enable 'Developer Mode'
+4. Click 'Load Unpacked' and naviagate to `adp-plus/extension`
+
 ## Privacy Policy
 ADP Plus does not send or transmit any user data.
 Any user data collected by the extension is stored in the user's browser and destroyed when the tab is closed.
