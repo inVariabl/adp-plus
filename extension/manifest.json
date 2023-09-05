@@ -10,7 +10,7 @@
     "48": "icon.png",
     "128": "icon.png"
   },
-  "permissions": ["scripting", "activeTab"],
+  "permissions": [],
   "content_scripts": [
     {
       "js": [
