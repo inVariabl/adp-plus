@@ -1,0 +1,3 @@
+#!/bin/sh
+
+zip adp-plus.zip background.js content.js icon.png icon_128.png manifest.json popup.html lib/jquery.min.js
