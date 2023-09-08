@@ -18,6 +18,7 @@ A Chrome Extension that adds AutoFill, AutoSave & other features to ADP TimeCloc
 ## Installation
 ### Chrome Web Store
 _Coming Soon_
+1. Click [here](https://chrome.google.com/webstore/detail/adp-plus/cofodcjpapmneekccpiclhegpkehcjci?hl=en&authuser=0) to install.
 
 ### Userscript
 1. Install a userscript manager like [TamperMonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) or [ViolentMonkey](https://chrome.google.com/webstore/detail/violentmonkey/jinjaccalgkegednnccohejagnlnfdag)
@@ -27,7 +28,7 @@ _Coming Soon_
 1. Download the [source code](https://github.com/inVariabl/adp-plus/archive/refs/heads/main.zip) and extract it
 2. Navigate to `chrome://extensions` in your browser
 3. Enable 'Developer Mode'
-4. Click 'Load Unpacked' and naviagate to `adp-plus/extension`
+4. Click 'Load Unpacked' and navigate to `adp-plus/extension`
 
 ## Privacy Policy
 ADP Plus does not send or transmit any user data.
