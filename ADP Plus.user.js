@@ -8,6 +8,8 @@
 // @author      Daniel Crooks
 // @icon        https://raw.githubusercontent.com/inVariabl/adp-plus/main/extension/icon.png
 // @license     GPL-3
+// @downloadURL https://github.com/inVariabl/adp-plus/raw/main/ADP%20Plus.user.js
+// @updateURL 	https://github.com/inVariabl/adp-plus/raw/main/ADP%20Plus.user.js
 // ==/UserScript==
 
 const SAVE_INTERVAL = 10; // AutoSaves every 10 seconds
@@ -20,8 +22,6 @@ function getRowInfo(row_number) {
 }
 
 function calculateHours(punchIn, punchOut) {
-	// TODO: 15 minute intervals (7 = down, 8min = up)
-	// nearest :00 :15 :30 :45
 	punchIn = convertTo24(punchIn)[0];
 	punchOut = convertTo24(punchOut);
 	const start = new Date("2000-01-01 " + punchIn);
@@ -29,7 +29,11 @@ function calculateHours(punchIn, punchOut) {
 	if (punchOut[1] === 1) { end = new Date("2000-01-02 " + punchOut[0]); }
 	const timeDifference = (end - start);
 	const hoursWorked = timeDifference / (1000 * 60 * 60);
-	return hoursWorked.toFixed(1);
+	return roundUpToNearestQuarter(hoursWorked);
+}
+
+function roundUpToNearestQuarter(number) {
+	return Math.ceil(number / 0.25) * 0.25;
 }
 
 function convertTo24(time12) {
@@ -60,6 +64,7 @@ function enterKeyPressOKButton() {
       document.getElementById("widgetFrame2402").contentWindow.document.querySelector("#addComment > footer > div > a.btn.btn-ok.krn-hard-destroy-monitor-control.ng-binding").click();
   	}
   });
+	saveTimeCard(); // Save timecard after saving comment
 }
 
 function maximizeTimeCard() {
@@ -99,8 +104,7 @@ const fullscreenObserver = new MutationObserver((mutationsList, observer) => {
   }
 });
 
-// TODO: These callback functions should be abstracted and standardized
-// to avoid callback hell
+// TODO: These callback functions should be abstracted and standardized to avoid callback hell
 
 function waitForPageLoad(callback) {
   const intervalId = setInterval(() => {
@@ -182,16 +186,20 @@ function waitForElementToBeEnabled(selector, callback, continuous) {
 
 function autoSave(seconds) {
   const intervalId = setInterval(() => {
-    const element = document.getElementById("widgetFrame2402");
-    if (element) {
-      const iframeDocument = element.contentWindow.document;
-      const saved = iframeDocument.querySelector("#saveButton_btn").classList.contains("disabled");
-      	if (!saved) {
-					document.getElementById("widgetFrame2402").contentWindow.document.querySelector("#saveButton_btn > i").click();
-					console.log("Saved!");
-      	}
-    }
+		saveTimeCard();
   }, (seconds * 1000)); // Check every x seconds
+}
+
+function saveTimeCard() {
+	const element = document.getElementById("widgetFrame2402");
+	if (element) {
+		const iframeDocument = element.contentWindow.document;
+    const saved = iframeDocument.querySelector("#saveButton_btn").classList.contains("disabled");
+		if (!saved) {
+			document.getElementById("widgetFrame2402").contentWindow.document.querySelector("#saveButton_btn > i").click();
+			console.log("TimeCard Saved.");
+		}
+	}
 }
 
 function autoClickComment() {
