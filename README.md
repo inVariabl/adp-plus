@@ -22,7 +22,7 @@ A Chrome Extension that adds AutoFill, AutoSave & other features to ADP TimeCloc
 1. Download the [source code](https://github.com/inVariabl/adp-plus/archive/refs/heads/main.zip) and extract it
 2. Navigate to `chrome://extensions` in your browser
 3. Enable 'Developer Mode'
-4. Click 'Load Unpacked' and navigate to `adp-plus/extension`
+4. Click 'Load Unpacked' and navigate to the unpacked `adp-plus/extension` folder
 
 ## Future Features
 - [ ] bind 'Tab' to cycle to next empty timecard
