@@ -13,12 +13,41 @@
 // ==/UserScript==
 
 const SAVE_INTERVAL = 10; // AutoSaves every 10 seconds
+const ADHP_MODE = true;
 
 function getRowInfo(row_number) {
-	const inPunchTime  = document.getElementById("widgetFrame2402").contentWindow.document.querySelector(`#column-inPunch-Row-${row_number} > div`).innerText;
-	const outPunchTime = document.getElementById("widgetFrame2402").contentWindow.document.querySelector(`#column-outPunch-Row-${row_number} > div`).innerText;
+	let inPunchTime = "";
+	let outPunchTime = "";
+	let fix = "";
+
+	inPunchTime = document.getElementById("widgetFrame2402").contentWindow.document.querySelector(`#column-inPunch-Row-${row_number} > div`).innerText;
+	outPunchTime = document.getElementById("widgetFrame2402").contentWindow.document.querySelector(`#column-outPunch-Row-${row_number} > div`).innerText;
+
+	if (inPunchTime == "") {
+ 		inPunchTime = getPunchTimeFromUser("In");
+ 		fix = "FIX: ";
+ 	}
+
+ 	if (outPunchTime == "") {
+ 		outPunchTime = getPunchTimeFromUser("Out");
+ 		fix = "FIX: ";
+ 	}
+
+	if (ADHP_MODE) {
+		fix = "FIX: ";
+	}
+
 	const calculatedHours = calculateHours(inPunchTime, outPunchTime);
-	return `${inPunchTime} - ${outPunchTime}, ${calculatedHours} hours, `; // comment format
+	return `${fix}${inPunchTime} - ${outPunchTime}, ${calculatedHours} hours, `; // comment format
+}
+
+function getPunchTimeFromUser(inOrOut) {
+  const userInput = window.prompt(`Please enter a Punch ${inOrOut} time (e.g. 10:00PM):`);
+  if (userInput !== null) {
+		return userInput;
+  } else {
+    alert("Operation canceled by the user.");
+  }
 }
 
 function calculateHours(punchIn, punchOut) {
@@ -85,9 +114,9 @@ function getSelectedRowNumber() {
 
 function fill() {
   const row_number = getSelectedRowNumber();
-  const row = getRowInfo(row_number);
   autofillComment(row_number);
-  console.log({row});
+  //const row = getRowInfo(row_number);
+  //console.log({row});
 }
 
 const fullscreenObserver = new MutationObserver((mutationsList, observer) => {
