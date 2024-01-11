@@ -13,7 +13,7 @@
 // ==/UserScript==
 
 const SAVE_INTERVAL = 10; // AutoSaves every 10 seconds
-const ADHP_MODE = true;
+const ADHP_MODE = false;
 
 function getRowInfo(row_number) {
 	let inPunchTime = "";
