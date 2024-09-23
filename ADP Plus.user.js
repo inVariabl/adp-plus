@@ -3,8 +3,9 @@
 // @description A Chrome Extension that adds AutoFill, AutoSave & other features to ADP TimeClock for CBU Student Workers
 // @namespace   ADP
 // @include     https://eetd2.adp.com/*
+// @include     https://*.mykronos.com/*
 // @grant       none
-// @version     1.0
+// @version     2.0
 // @author      Daniel Crooks
 // @icon        https://raw.githubusercontent.com/inVariabl/adp-plus/main/extension/icon.png
 // @license     GPL-3
@@ -19,9 +20,13 @@ function getRowInfo(row_number) {
 	let inPunchTime = "";
 	let outPunchTime = "";
 	let fix = "";
+	let punchDate = "";
 
 	inPunchTime = document.getElementById("widgetFrame2402").contentWindow.document.querySelector(`#column-inPunch-Row-${row_number} > div`).innerText;
 	outPunchTime = document.getElementById("widgetFrame2402").contentWindow.document.querySelector(`#column-outPunch-Row-${row_number} > div`).innerText;
+	punchDate = document.getElementById("widgetFrame2402").contentWindow.document.querySelector(`#column-Date-Row-${row_number} > div`).innerText;
+
+	punchDate = simplifyDate(punchDate);
 
 	if (inPunchTime == "") {
  		inPunchTime = getPunchTimeFromUser("In");
@@ -37,8 +42,22 @@ function getRowInfo(row_number) {
 		fix = "FIX: ";
 	}
 
+	//inPunchTime = roundToNearestHalfHour(inPunchTime);
+	//outPunchTime = roundToNearestHalfHour(outPunchTime);
+
 	const calculatedHours = calculateHours(inPunchTime, outPunchTime);
-	return `${fix}${inPunchTime} - ${outPunchTime}, ${calculatedHours} hours, `; // comment format
+
+	// TODO: Make Picker to Select RD
+
+	// Jeremy Duket Format:
+	// [FIX: Start - End, Total Hours, Description]
+	// e.g. [FIX: 2:00 - 5:00pm, 3 hrs, staff meeting]
+	//return `${fix}${inPunchTime} - ${outPunchTime}, ${calculatedHours} hours, `; // Jeremy Duket comment format
+
+	// Austin Iannuzzi Format:
+	// [Date; Total Hours; Time Frame; Description]
+	// e.g. [8/6; 3 hrs; 2-5pm; staff meeting]
+	return `${punchDate}; ${calculatedHours} hrs; ${inPunchTime} - ${outPunchTime}; `;
 }
 
 function getPunchTimeFromUser(inOrOut) {
@@ -50,6 +69,47 @@ function getPunchTimeFromUser(inOrOut) {
   }
 }
 
+function roundToNearestHalfHour(timeStr) {
+    // Parse the time string
+    let [time, period] = timeStr.split(/(?=[APM])/);
+    let [hours, minutes] = time.split(':').map(Number);
+
+    // Convert to 24-hour format for easier manipulation
+    if (period === 'PM' && hours !== 12) {
+        hours += 12;
+    } else if (period === 'AM' && hours === 12) {
+        hours = 0;
+    }
+
+    // Round minutes to the nearest half hour
+    if (minutes < 15) {
+        minutes = 0;
+    } else if (minutes >= 15 && minutes < 45) {
+        minutes = 30;
+    } else {
+        minutes = 0;
+        hours += 1;
+    }
+
+    // Adjust hours if it overflows
+    if (hours === 24) {
+        hours = 0;
+    }
+
+    // Convert back to 12-hour format
+    period = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    if (hours === 0) {
+        hours = 12;
+    }
+
+    // Format minutes to always be two digits
+    minutes = minutes.toString().padStart(2, '0');
+
+    // Return the rounded time string
+    return `${hours}:${minutes}${period}`;
+}
+
 function calculateHours(punchIn, punchOut) {
 	punchIn = convertTo24(punchIn)[0];
 	punchOut = convertTo24(punchOut);
@@ -58,11 +118,12 @@ function calculateHours(punchIn, punchOut) {
 	if (punchOut[1] === 1) { end = new Date("2000-01-02 " + punchOut[0]); }
 	const timeDifference = (end - start);
 	const hoursWorked = timeDifference / (1000 * 60 * 60);
-	return roundUpToNearestQuarter(hoursWorked);
+	// return roundUpToNearestQuarter(hoursWorked); // CA Law No Longer Rounds
+	return roundUpToThreeDecimals(hoursWorked);
 }
 
-function roundUpToNearestQuarter(number) {
-	return Math.ceil(number / 0.25) * 0.25;
+function roundUpToThreeDecimals(number) {
+	return Math.ceil(number * 1000) / 1000;
 }
 
 function convertTo24(time12) {
@@ -81,6 +142,12 @@ function convertTo24(time12) {
   }
 
   return [`${hours.toString()}:${minutes}`, day];
+}
+
+function simplifyDate(dateString) {
+	const datePart = dateString.split(' ')[1];
+	const [month, day] = datePart.split('/').map(part => part.replace(/^0+/, ''));
+	return `${month}/${day}`;
 }
 
 function autofillComment(row_number) {

@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "ADP Plus",
   "description": "Adds AutoSave & Autofill Time Clock feature to ADP Comments for CBU Student Workers",
-  "version": "1.0.3",
+  "version": "1.2.0",
   "author": "danieljames.crooks@calbaptist.edu",
   "icons": {
     "16": "icon.png",
@@ -17,7 +17,8 @@
         "content.js"
       ],
       "matches": [
-        "https://eetd2.adp.com/*"
+        "https://eetd2.adp.com/*",
+        "https://*.mykronos.com/*"
       ]
     }
   ]
