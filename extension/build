@@ -1,3 +1,4 @@
 #!/bin/sh
 
-zip adp-plus.zip background.js content.js icon.png icon_128.png manifest.json popup.html lib/jquery.min.js
+sudo cp -f ../ADP Plus.user.js content.js
+zip adp-plus.zip background.js content.js icon.png icon_128.png manifest.json popup.html

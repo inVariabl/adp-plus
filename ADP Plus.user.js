@@ -5,7 +5,7 @@
 // @include     https://eetd2.adp.com/*
 // @include     https://*.mykronos.com/*
 // @grant       none
-// @version     2.0
+// @version     1.3.1
 // @author      Daniel Crooks
 // @icon        https://raw.githubusercontent.com/inVariabl/adp-plus/main/extension/icon.png
 // @license     GPL-3
@@ -14,59 +14,50 @@
 // ==/UserScript==
 
 const SAVE_INTERVAL = 10; // AutoSaves every 10 seconds
-const ADHP_MODE = false;
 
 function getRowInfo(row_number) {
-	let inPunchTime = "";
-	let outPunchTime = "";
-	let fix = "";
+	let inPunchTime = null;
+	let outPunchTime = null;
+	let hr = "hours";
 	let punchDate = "";
+    let calculatedHours;
 
 	inPunchTime = document.getElementById("widgetFrame2402").contentWindow.document.querySelector(`#column-inPunch-Row-${row_number} > div`).innerText;
 	outPunchTime = document.getElementById("widgetFrame2402").contentWindow.document.querySelector(`#column-outPunch-Row-${row_number} > div`).innerText;
 	punchDate = document.getElementById("widgetFrame2402").contentWindow.document.querySelector(`#column-Date-Row-${row_number} > div`).innerText;
-
 	punchDate = simplifyDate(punchDate);
 
-	if (inPunchTime == "") {
- 		inPunchTime = getPunchTimeFromUser("In");
- 		fix = "FIX: ";
- 	}
+    if (!confirm(`Do you need to fix your Time Clock? \n\n${punchDate}; ${calculatedHours} hrs; ${inPunchTime} - ${outPunchTime};\n\n 'Ok' to Fix Clock, 'Cancel' if perfect`)) {
+        return ``; // blank string so just input comment
+    }
 
- 	if (outPunchTime == "") {
- 		outPunchTime = getPunchTimeFromUser("Out");
- 		fix = "FIX: ";
- 	}
-
-	if (ADHP_MODE) {
-		fix = "FIX: ";
-	}
+    inPunchTime = getPunchTimeFromUser("In", inPunchTime);
+    outPunchTime = getPunchTimeFromUser("Out", outPunchTime);
+	calculatedHours = calculateHours(inPunchTime, outPunchTime);
+    hr = hourOrhours(calculatedHours);
 
 	//inPunchTime = roundToNearestHalfHour(inPunchTime);
 	//outPunchTime = roundToNearestHalfHour(outPunchTime);
 
-	const calculatedHours = calculateHours(inPunchTime, outPunchTime);
 
 	// TODO: Make Picker to Select RD
-
 	// Jeremy Duket Format:
 	// [FIX: Start - End, Total Hours, Description]
 	// e.g. [FIX: 2:00 - 5:00pm, 3 hrs, staff meeting]
-	//return `${fix}${inPunchTime} - ${outPunchTime}, ${calculatedHours} hours, `; // Jeremy Duket comment format
-
+	// return `${fix}${inPunchTime} - ${outPunchTime}, ${calculatedHours} hours, `; // Jeremy Duket comment format
 	// Austin Iannuzzi Format:
 	// [Date; Total Hours; Time Frame; Description]
 	// e.g. [8/6; 3 hrs; 2-5pm; staff meeting]
-	return `${punchDate}; ${calculatedHours} hrs; ${inPunchTime} - ${outPunchTime}; `;
+
+	return `${punchDate}; ${calculatedHours} ${hr}; ${inPunchTime} - ${outPunchTime}; `;
 }
 
-function getPunchTimeFromUser(inOrOut) {
-  const userInput = window.prompt(`Please enter a Punch ${inOrOut} time (e.g. 10:00PM):`);
-  if (userInput !== null) {
-		return userInput;
-  } else {
-    alert("Operation canceled by the user.");
-  }
+function hourOrhours(calculatedHours) {
+    return calculatedHours == 1 ? 'hour' : 'hours';
+}
+
+function getPunchTimeFromUser(inOrOut, punchTime) {
+    return window.prompt(`Punch ${inOrOut}: `, punchTime);
 }
 
 function roundToNearestHalfHour(timeStr) {
