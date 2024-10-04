@@ -163,6 +163,15 @@ function enterKeyPressOKButton() {
 	saveTimeCard(); // Save timecard after saving comment
 }
 
+function escapeKeyPressCloseButton() {
+  document.getElementById("widgetFrame2402").contentWindow.document.addEventListener("keydown", function(event) {
+    if (event.key === "Escape") {
+      document.getElementById("widgetFrame2402").contentWindow.document.querySelector("#comment-add-dialog > div.jqx-window-header.jqx-window-header-bluefin.jqx-widget-header.jqx-widget-header-bluefin.jqx-disableselect.jqx-disableselect-bluefin.jqx-rc-t.jqx-rc-t-bluefin > div.jqx-window-close-button-background.jqx-window-close-button-background-bluefin > div").click();
+  	}
+  });
+	saveTimeCard(); // Save timecard after saving comment
+}
+
 function maximizeTimeCard() {
   document.querySelector("body > krn-app > krn-navigator-container > ui-view > krn-workspace-manager-container > krn-workspace > div > krn-layout-manager > div > div.krn-layout-manager__slot.resizable.no-transition.col75.h100.hide-grabber.order1 > krn-widget > krn-toolbar > h5 > div > button:nth-child(1)").click();
 }
@@ -322,6 +331,7 @@ fullscreenObserver.observe(document.body, { childList: true, subtree: true });
 waitForPageLoad(() => {
   console.log("Page Fully Loaded!");
   enterKeyPressOKButton();
+  escapeKeyPressCloseButton();
   autoSave(SAVE_INTERVAL);
   autoClickComment();
 });
